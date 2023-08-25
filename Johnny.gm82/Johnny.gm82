@@ -1,0 +1,23 @@
+gm82_version=5
+gameid=628980980
+
+info_author=decompiler clan :police_car: :police_car: :police_car:
+info_version=
+info_information=
+
+exe_company=
+exe_product=
+exe_copyright=
+exe_description=
+exe_version=1.0.0.0
+
+has_backgrounds=0
+has_datafiles=0
+has_fonts=0
+has_objects=0
+has_paths=0
+has_scripts=1
+has_sounds=0
+has_sprites=0
+has_timelines=0
+has_triggers=0
