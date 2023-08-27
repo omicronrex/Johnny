@@ -12,8 +12,6 @@ do {
     ds_list_add(files,file_text_read_string(f)) file_text_readln(f)
 } until file_text_eof(f)
 
-//show_message("Johnny v0.2##"+dslist(files))
-
 //go through source files collecting functions
 funcs=ds_list_create()
 
@@ -31,7 +29,7 @@ repeat (ds_list_size(files)) {fn=ds_list_find_value(files,0) ds_list_delete(file
     do {
         str=file_text_read_string(f) file_text_readln(f)
         //look for triple slash function declarations
-        if (string_pos('GMREAL',str) || string_pos('GMSTR',str) || string_pos('#define',str)) {
+        if (string_pos('GMREAL',str) || string_pos('GMSTR',str) || string_pos('#define',str) || file_text_eof(f)) {
             if (helpline!="" && !string_pos("__",helpline)) {
                 ds_list_add(funcs,helpline+"|"+comments)
             }
@@ -56,11 +54,35 @@ repeat (ds_list_size(files)) {fn=ds_list_find_value(files,0) ds_list_delete(file
 
 ds_list_sort(funcs,1)
 
+first_func=1
+
+if (johnny_exts!="") johnny_exts+=",'"+extname+"'" else johnny_exts="'"+extname+"'"
+if (johnny_names!="") johnny_names+=",[" else johnny_names="["
+if (johnny_descs!="") johnny_descs+=",[" else johnny_descs="["
+
 out=""
 i=0 repeat (ds_list_size(funcs)) {
-    out+=ds_list_find_value(funcs,i)+chr_crlf
+    find=ds_list_find_value(funcs,i)
+    out+=find+chr_crlf
+
+    helpline=string_copy(find,1,string_pos("|",find)-1)
+    comments=string_delete(find,1,string_pos("|",find))
+
+    if (first_func) {
+        johnny_names+='"'+string_replace_all(helpline,'"','\"')+'"'
+        johnny_descs+='"'+string_replace_all(string_replace_all(comments,"#","\n"),'"','\"')+'"'
+    } else {
+        johnny_names+=',"'+string_replace_all(helpline,'"','\"')+'"'
+        johnny_descs+=',"'+string_replace_all(string_replace_all(comments,"#","\n"),'"','\"')+'"'
+    }
+    first_func=0
+
     i+=1
 }
+
+johnny_names+="]"
+johnny_descs+="]"
+
 
 b=buffer_create()
 buffer_write_data(b,out)
