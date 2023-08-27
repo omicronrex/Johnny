@@ -1,0 +1,96 @@
+<body background="back.gif" overflow=hidden; style="
+    background-color: #404040;
+    color: #cccccc;
+    font: 13px courier;
+    font-weight: bold;
+    background-attachment: fixed;
+    margin: 0px;
+    overflow: hidden;
+    word-wrap:break-word;
+">
+
+<table style="width:248; height:24; background-color:#404040;">
+    <tr><td>Extension</td></tr>
+    <tr><td><select Size=4 id="extension" onclick="change_ext()" onkeyup="change_ext()" style="width:242;height:96;"></select></td></tr>
+    <tr><td>Function Search</td></tr>
+    <tr><td><input type="text" id="search" style="width:242;"></td></tr>
+    <tr><td><select Size=4 id="function" onclick="change_func()" onkeyup="change_func()" style="width:242;height:96;"></select></td></tr>
+</table>
+
+<div style="margin:8;">
+    <h3 id="func name"></h3>
+    <p id="func desc"></p>
+</div>
+
+<script>
+    /*johnny*/
+    
+    //initialize some values
+    func_names=[];
+    func_descs=[];
+    current_query="";
+    var searchfield = document.getElementById("search");
+    
+    //fill extension list
+    var list = document.getElementById("extension");    
+    for (i=0;i<func_exts.length;i+=1) {
+        opt = document.createElement("option");
+        opt.innerHTML=func_exts[i];
+        list.appendChild(opt);
+    }
+    
+    //change currently displayed extension
+    function change_ext() {
+        var select = document.getElementById("extension");
+        var ext = select.selectedIndex;
+        
+        func_names=func_name_table[ext];
+        func_descs=func_desc_table[ext]; 
+
+        //fill function list
+        var list = document.getElementById("function");    
+        list.innerHTML="";
+        for (i=0;i<func_names.length;i+=1) {
+            opt = document.createElement("option");
+            opt.innerHTML=func_names[i];
+            list.appendChild(opt);
+        }
+    }
+    
+    //change currently displayed function
+    function change_func() {
+        var select = document.getElementById("function");
+        var value = select.options[select.selectedIndex].text;
+        
+        //display function contents
+        document.getElementById("func name").innerHTML = func_names[select.selectedIndex];
+        document.getElementById("func desc").innerHTML = func_descs[select.selectedIndex];
+    }
+    
+    //search box updated
+    function search() {
+        var query = searchfield.value;
+        if (query!=current_query && query !== "") {
+            //perform search
+            current_query=query;            
+            for (i=0;i<func_names.length;i+=1) {
+                if (func_names[i].indexOf(query) !== -1) {
+                    //select function in list box
+                    var select = document.getElementById("function");
+                    select.value = select.options[i].text;
+                    select.selectedIndex=i;
+                    change_func();
+                    break;
+                }
+            }
+        }
+    }
+    
+    setInterval(search, 100);
+    
+    document.addEventListener('keydown', change_func)
+    
+</script>
+
+</body>
+</html>
