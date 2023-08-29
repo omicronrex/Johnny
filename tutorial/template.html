@@ -14,7 +14,7 @@
     <tr><td><select Size=4 id="extension" onclick="change_ext()" onkeyup="change_ext()" style="width:242;height:96;"></select></td></tr>
     <tr><td>Function Search</td></tr>
     <tr><td><input type="text" id="search" style="width:242;"></td></tr>
-    <tr><td><select Size=4 id="function" onclick="change_func()" onkeyup="change_func()" style="width:242;height:96;"></select></td></tr>
+    <tr><td><select Size=4 id="function" onclick="change_func()" onkeyup="change_func()" style="width:242;height:160;"></select></td></tr>
 </table>
 
 <div style="margin:8;">
@@ -30,6 +30,7 @@
     func_descs=[];
     current_query="";
     var searchfield = document.getElementById("search");
+    var functionlist = document.getElementById("function");
     
     //fill extension list
     var list = document.getElementById("extension");    
@@ -48,12 +49,11 @@
         func_descs=func_desc_table[ext]; 
 
         //fill function list
-        var list = document.getElementById("function");    
-        list.innerHTML="";
+        functionlist.innerHTML="";
         for (i=0;i<func_names.length;i+=1) {
             opt = document.createElement("option");
             opt.innerHTML=func_names[i];
-            list.appendChild(opt);
+            functionlist.appendChild(opt);
         }
     }
     
@@ -70,18 +70,23 @@
     //search box updated
     function search() {
         var query = searchfield.value;
-        if (query!=current_query && query !== "") {
-            //perform search
-            current_query=query;            
+        if (query!=current_query && query != "") {
+            //perform search, with scoring based on leftmostness of query string
+            current_query=query;
+            var best_match=999;
+            var id_match=-1;
             for (i=0;i<func_names.length;i+=1) {
-                if (func_names[i].indexOf(query) !== -1) {
-                    //select function in list box
-                    var select = document.getElementById("function");
-                    select.value = select.options[i].text;
-                    select.selectedIndex=i;
-                    change_func();
-                    break;
+                var match=func_names[i].indexOf(query);
+                if (match != -1 && match < best_match) {
+                    best_match=match;
+                    id_match=i;
                 }
+            }
+            if (id_match!=-1) {
+                //select function in list box
+                functionlist.value = functionlist.options[id_match].text;
+                functionlist.selectedIndex=id_match;
+                change_func();
             }
         }
     }
