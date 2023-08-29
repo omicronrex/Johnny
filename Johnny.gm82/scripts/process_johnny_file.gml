@@ -61,12 +61,46 @@ i=0 repeat (ds_list_size(funcs)) {
     helpline=string_copy(find,1,string_pos("|",find)-1)
     comments=string_delete(find,1,string_pos("|",find))
 
+    //lets format the text nicely
+
+    //escape quotes
+    helpline=string_replace_all(helpline,'"','\"')
+    comments=string_replace_all(comments,'"','\"')
+
+    //convert line breaks
+    comments=string_replace_all(comments,"#","<br>")
+
+    //highlight the return tag
+    comments=string_replace_all(comments,"returns: ","<tt>Returns:</tt> ")
+
+    //look for all function arguments and highlight them
+    c=string_pos("<tt>Returns:</tt> ",comments)
+    l=string_length(comments)
+    p=1
+    store=1
+    do {
+        p+=1
+        if (string_copy(comments,p,4)=="<br>") {store=p+4}
+        if (string_copy(comments,p,2)==": ") {
+            comments=string_insert("</tt>",comments,p+1)
+            comments=string_insert("<tt>",comments,store)
+            p+=9
+        }
+    } until (p>=c || p>=l)
+
+    //add a line break after the return value
+    c=string_pos("<tt>Returns:</tt> ",comments)
+    l=string_length(comments)
+    do {c+=1} until (string_copy(comments,c,4)=="<br>" || c>l-4)
+    comments=string_insert("<br>",comments,c)
+
+    //add to list
     if (first_func) {
-        johnny_names+='"'+string_replace_all(helpline,'"','\"')+'"'
-        johnny_descs+='"'+string_replace_all(string_replace_all(comments,"#","\n"),'"','\"')+'"'
+        johnny_names+='"'+helpline+'"'
+        johnny_descs+='"'+comments+'"'
     } else {
-        johnny_names+=',"'+string_replace_all(helpline,'"','\"')+'"'
-        johnny_descs+=',"'+string_replace_all(string_replace_all(comments,"#","\n"),'"','\"')+'"'
+        johnny_names+=',"'+helpline+'"'
+        johnny_descs+=',"'+comments+'"'
     }
     first_func=0
 
@@ -75,7 +109,6 @@ i=0 repeat (ds_list_size(funcs)) {
 
 johnny_names+="]"
 johnny_descs+="]"
-
 
 b=buffer_create()
 buffer_write_data(b,out)
