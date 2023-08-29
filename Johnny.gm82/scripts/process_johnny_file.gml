@@ -68,6 +68,7 @@ i=0 repeat (ds_list_size(funcs)) {
     comments=string_replace_all(comments,'"','\"')
 
     //convert line breaks
+    if (string_ends_with(comments,"#")) comments=string_copy(comments,1,string_length(comments)-1)
     comments=string_replace_all(comments,"#","<br>")
 
     //highlight the return tag
@@ -92,7 +93,7 @@ i=0 repeat (ds_list_size(funcs)) {
     c=string_pos("<tt>Returns:</tt> ",comments)
     l=string_length(comments)
     do {c+=1} until (string_copy(comments,c,4)=="<br>" || c>l-4)
-    comments=string_insert("<br>",comments,c)
+    if !(c>l-4) comments=string_insert("<br>",comments,c)
 
     //add to list
     if (first_func) {
