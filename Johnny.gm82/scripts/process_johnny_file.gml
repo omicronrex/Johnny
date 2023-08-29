@@ -29,15 +29,8 @@ repeat (ds_list_size(files)) {fn=ds_list_find_value(files,0) ds_list_delete(file
     do {
         str=file_text_read_string(f) file_text_readln(f)
         //look for triple slash function declarations
-        if (string_pos('GMREAL',str) || string_pos('GMSTR',str) || string_pos('#define',str) || file_text_eof(f)) {
-            if (helpline!="" && !string_pos("__",helpline)) {
-                ds_list_add(funcs,helpline+"|"+comments)
-            }
-            helpline=""
-            comments=""
-        }
         if (string_pos('///',str) && string_pos('(',str) && string_pos(')',str)) {
-            if (helpline!="" && !string_pos("__",helpline)) {
+            if (helpline!="") {
                 ds_list_add(funcs,helpline+"|"+comments)
             }
             helpline=string_delete_edge_spaces(string_replace(str,"///",""))
@@ -94,5 +87,5 @@ buffer_copy_part(b2,b,0,buffer_get_size(b))
 buffer_destroy(b)
 buffer_save(b2,output)
 
-show_message(string(ds_list_size(funcs))+" functions written to "+output)
+showmessage+=string(ds_list_size(funcs))+" functions written to "+filename_name(output)+"#"
 ds_list_destroy(funcs)
