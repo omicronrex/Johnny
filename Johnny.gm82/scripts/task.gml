@@ -1,6 +1,11 @@
 var finddir,list,list2,i,fn;
 
-finddir=directory_previous(directory_previous(working_directory))
+finddir=working_directory
+
+if (!file_exists("readme.md"))
+    finddir=directory_previous(finddir)
+
+finddir=directory_previous(finddir)
 
 list=file_find_list(finddir,"*",fa_directory,false)
 list2=dslist()
