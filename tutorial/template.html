@@ -47,6 +47,11 @@
             opt.innerHTML = func_names[i];
             functionlist.appendChild(opt);
         }
+        
+        //clear it out
+        searchfield.value = "";
+        document.getElementById("func name").innerHTML = "";
+        document.getElementById("func desc").innerHTML = "";
     }
     
     //change currently displayed function
@@ -83,9 +88,7 @@
         }
     }
     
-    setInterval(search,100);
-    
-    document.addEventListener('keydown',change_func)    
+    setInterval(search,100);   
 </script>
 </body>
 </html>

@@ -1,0 +1,42 @@
+body {
+    background-color: #404040;
+    color: #cccccc;
+    font: 15px;
+    background-attachment: fixed;
+    margin: 0px;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    word-wrap: break-word;
+}
+
+
+h3 {
+    font: 16px courier;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+tt, b {
+    color: #c000c0;
+}
+
+table {
+    width: 231;
+    background-color: #404040;
+    font: 14px courier;
+    font-weight: bold;
+}
+
+div {
+    left: 4;
+    right: 0;
+    top:335;
+    bottom: 0;
+    overflow: auto;
+    position: absolute;
+}
+
+input, select {
+    width: 225;
+}
