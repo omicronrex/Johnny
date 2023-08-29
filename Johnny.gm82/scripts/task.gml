@@ -5,6 +5,8 @@ finddir=working_directory
 if (!file_exists("readme.md"))
     finddir=directory_previous(finddir)
 
+tmpdir=finddir+"\tutorial\"
+
 finddir=directory_previous(finddir)
 
 list=file_find_list(finddir,"*",fa_directory,false)
@@ -43,8 +45,7 @@ johnny_insert='
     ];   
 '
 
-str=file_text_read_all("C:\path\gamemaker\tutorials\GM82 Documentation\template.html")
-str=string_replace(str,"/*johnny*/",johnny_insert)
+str=string_replace(file_text_read_all(tmpdir+"\template.html"),"/*johnny*/",johnny_insert)
 file_text_write_all("C:\path\gamemaker\tutorials\GM82 Documentation\page01.html",str)
 
 game_end()
