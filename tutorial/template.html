@@ -3,7 +3,7 @@
 
 <table>
     <tr><td>Extension</td></tr>
-    <tr><td><select Size=5 id="extension" onclick="change_ext()" onkeyup="change_ext()"></select></td></tr>
+    <tr><td><select Size=6 id="extension" onclick="change_ext()" onkeyup="change_ext()"></select></td></tr>
     <tr><td>Function Search</td></tr>
     <tr><td><input type="text" id="search"></td></tr>
     <tr><td><select Size=10 id="function" onclick="change_func()" onkeyup="change_func()" ></select></td></tr>
@@ -84,6 +84,10 @@
                 functionlist.value = functionlist.options[id_match].text;
                 functionlist.selectedIndex = id_match;
                 change_func();
+            } else {
+                functionlist.selectedIndex = -1;
+                document.getElementById("func name").innerHTML = "Search empty";
+                document.getElementById("func desc").innerHTML = "No results found for \""+query+"\".";
             }
         }
     }
