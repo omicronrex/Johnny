@@ -29,7 +29,7 @@ repeat (ds_list_size(files)) {fn=ds_list_find_value(files,0) ds_list_delete(file
     do {
         str=file_text_read_string(f) file_text_readln(f)
         //look for triple slash function declarations
-        if (string_pos('///',str) && string_pos('(',str) && string_pos(')',str)) {
+        if ((string_pos('///',str) && string_pos('(',str) && string_pos(')',str)) || file_text_eof(f)) {
             if (helpline!="") {
                 ds_list_add(funcs,helpline+"|"+comments)
             }
@@ -89,13 +89,20 @@ i=0 repeat (ds_list_size(funcs)) {
         }
     } until (p>=c || p>=l)
 
-    //add a line break after the return value
-    c=string_pos("<tt>Returns:</tt> ",comments)
+    //add a double line break after the last line with a <tt>
     l=string_length(comments)
-    do {c+=1} until (string_copy(comments,c,4)=="<br>" || c>l-4)
-    if !(c>l-4) comments=string_insert("<br>",comments,c)
+    p=l while (p>1) {
+        p-=1
+        if (string_copy(comments,p,5)=="</tt>") {
+            //found colon, go forward to first line break
+            do {p+=1} until (string_copy(comments,p,4)=="<br>" || p>=l)
+            //duplicate line break
+            if (p<l) comments=string_insert("<br>",comments,p)
+            break
+        }
+    }
 
-    //add to list
+    //add functions to list
     if (first_func) {
         johnny_names+='"'+helpline+'"'
         johnny_descs+='"'+comments+'"'
