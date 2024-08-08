@@ -87,7 +87,7 @@ i=0 repeat (ds_list_size(funcs)) {
             comments=string_insert("<tt>",comments,store)
             p+=9
         }
-    } until (p>=c || p>=l)
+    } until (/*p>=c || */p>=l)
 
     //add a double line break after the last line with a <tt>
     l=string_length(comments)
