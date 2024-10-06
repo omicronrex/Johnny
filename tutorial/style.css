@@ -29,12 +29,13 @@ table {
 }
 
 div {
-    left: 4;
-    right: 0;
-    top:350;
-    bottom: 0;
-    overflow: auto;
-    position: absolute;
+    padding-left: 4;
+    padding-right: 4;
+    font-family:serif;
+}
+
+select {
+    font-size:10pt;
 }
 
 input, select {
