@@ -29,11 +29,11 @@ repeat (ds_list_size(files)) {fn=ds_list_find_value(files,0) ds_list_delete(file
     do {
         str=file_text_read_string(f) file_text_readln(f)
         //look for triple slash function declarations
-        if ((string_pos('///',str) && string_pos('(',str) && string_pos(')',str)) || file_text_eof(f)) {
+        if ((string_pos('///',str) && ((string_pos('(',str) && string_pos(')',str) || string_pos('(@)',str)))) || file_text_eof(f)) {
             if (helpline!="") {
                 ds_list_add(funcs,helpline+"|"+comments)
             }
-            helpline=string_delete_edge_spaces(string_replace(str,"///",""))
+            helpline=string_replace(string_delete_edge_spaces(string_replace(str,"///","")),"(@)","")
             comments=""
             looking_for_main_comment=1
         } else if (string_pos('//',str) && looking_for_main_comment) {

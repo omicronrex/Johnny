@@ -50,6 +50,8 @@ str=string_replace(file_text_read_all(tmpdir+"\template.html"),"/*johnny*/",john
 
 file_text_write_all(registry_read_string_ext("SOFTWARE\Game Maker\Version 8.2\Preferences","Directory")+"\tutorials\GM82 Documentation\page01.html",str)
 
+message_size(600,-1)
+
 show_message(showmessage)
 
 game_end()
