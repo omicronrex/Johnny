@@ -28,7 +28,7 @@ johnny_descs=""
 showmessage="Johnny v0.21#GM8.2 documentation generator##"
 
 i=0 repeat (ds_list_size(list2)) {
-    process_johnny_file(ds_list_find_value(list2,i),finddir)
+    process_johnny_file(ds_list_find_value(list2,i))
 i+=1}
 
 johnny_insert='
