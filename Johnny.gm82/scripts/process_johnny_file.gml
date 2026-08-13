@@ -1,5 +1,5 @@
 //make list of source files
-var f,dir,output,files,fn,is_c,helpline,comments,looking_for_main_comment,str,out,i,b,b2,funcs;
+var f,fn,dir,output,files,fn,is_c,helpline,comments,looking_for_main_comment,str,out,i,b,b2,funcs;
 
 f=file_text_open_read(argument0)
 dir=filename_dir(argument0)+"\"
@@ -8,7 +8,9 @@ extname=file_text_read_string(f) file_text_readln(f)
 
 files=ds_list_create()
 do {
-    ds_list_add(files,file_text_read_string(f)) file_text_readln(f)
+    fn=file_text_read_string(f) file_text_readln(f)
+    if (!file_exists(dir+fn)) show_message("Warning: missing file##"+dir+fn)
+    else ds_list_add(files,fn)
 } until file_text_eof(f)
 
 //go through source files collecting functions
