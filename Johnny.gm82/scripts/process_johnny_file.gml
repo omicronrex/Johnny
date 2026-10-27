@@ -54,8 +54,9 @@ i=0 repeat (ds_list_size(funcs)) {
     find=ds_list_find_value(funcs,i)
     out+=find+chr_crlf
 
-    helpline=string_copy(find,1,string_pos("|",find)-1)
-    comments=string_delete(find,1,string_pos("|",find))
+    p=string_pos("|",find)
+    helpline=string_copy(find,1,p-1)
+    comments=string_delete(find,1,p)
 
     //lets format the text nicely
 
@@ -64,14 +65,14 @@ i=0 repeat (ds_list_size(funcs)) {
     comments=string_replace_all(comments,'"','\"')
 
     //convert line breaks
-    if (string_ends_with(comments,"#")) comments=string_copy(comments,1,string_length(comments)-1)
+    if (string_ends_with(comments,"#")) comments=string_delete_end(comments,1)
     comments=string_replace_all(comments,"#","<br>")
 
     //highlight the return tag
-    comments=string_replace_all(comments,"returns: ","<tt>Returns:</tt> ")
+    comments=string_replace_all(comments,"returns: ","Returns: ")
+    comments=string_replace_all(comments,"Returns: ","<tt>Returns:</tt> ")
 
     //look for all function arguments and highlight them
-    c=string_pos("<tt>Returns:</tt> ",comments)
     l=string_length(comments)
     p=1
     store=1
@@ -82,6 +83,7 @@ i=0 repeat (ds_list_size(funcs)) {
             comments=string_insert("</tt>",comments,p+1)
             comments=string_insert("<tt>",comments,store)
             p+=9
+            l+=9
         }
     } until (p>=l)
 
